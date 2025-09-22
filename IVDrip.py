@@ -33,3 +33,17 @@ c_b = pre.re_encrypt(params, rk, c_a)
 print(pre.expm(params,msg))
 # print(gm)
 print(pre.decrypt(params, sk_b, c_b))
+
+# ---- identity checks ----
+zero = groupObj.init(ZR, 0)
+
+oneG1 = groupObj.init(G1, 1)
+oneG2 = groupObj.init(G2, 1)
+oneGT = groupObj.init(GT, 1)
+
+print("G1 identity == g**0 ? ", (params['g'] ** zero) == oneG1)
+print("G2 identity (pairing base) sanity: ", isinstance(oneG2, type(oneG2)))  # optional
+print("GT identity == Z**0 ? ", (params['Z'] ** zero) == oneGT)
+
+# check your expm helper at m=0:
+print("expm(Z, 0) == 1_GT ? ", pre.expm(params, zero) == oneGT)
