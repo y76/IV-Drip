@@ -61,7 +61,7 @@ class AFGH06(PREnc):
             print("sk => '%s'" % sk)
         return (pk, sk)
 
-    def rekeygen(self, params, pk_a, sk_a, pk_b, sk_b):
+    def rekeygen(self, params, pk_a, sk_a, pk_b):
         pk_b2 = pk_b['pk2']
         sk_a1 = sk_a['sk1']
         rk = pk_b2 ** sk_a1
@@ -103,6 +103,16 @@ class AFGH06(PREnc):
 
         #return group.decode(m)
         return m
+    
+    def add(self, params, ca, cb):
+        ca1=ca['c1']
+        ca2=ca['c2']
+        cb1=cb['c1']
+        cb2=cb['c2']
+        cr1= ca1*cb1
+        cr2=ca2*cb2
+        cr={ 'c1' : cr1, 'c2' : cr2 }
+        return cr
         
     def re_encrypt(self, params, rk, c_a):
         c1 = c_a['c1'] 
