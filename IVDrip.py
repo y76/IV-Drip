@@ -71,6 +71,6 @@ def getPIIList(self, filename):
     with open(filename, 'r') as file:
         for line in file:
             key, value = line.split(':', 1) 
-            my_dict[key.strip()] = value.strip()
+            PIIList[key.strip()] = value.strip()
 
     return PIIList
