@@ -29,7 +29,7 @@ def consumer(self, pkb, plabels,piilist):
     cs = {}
     for label in plabels:
         if label in piilist:
-            cs[label] = pre.encrypt(params,pk_c,piilist[label])
+            cs[label] = pre.encrypt(params,pk_c,-piilist[label])
             # TODO: compute zkp
         else:
             msg = groupObj.random(ZR)
@@ -62,3 +62,15 @@ def broker_pli(self, skb, intersec):
         if pre.decrypt(params, skb, intersec[label]) == groupObj.init(GT, 1):
             res.append(label)
     return res
+
+
+#test
+
+def getPIIList(self, filename):
+    PIIList = {}
+    with open(filename, 'r') as file:
+        for line in file:
+            key, value = line.split(':', 1) 
+            my_dict[key.strip()] = value.strip()
+
+    return PIIList
