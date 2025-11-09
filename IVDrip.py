@@ -24,7 +24,14 @@ groupObj = PairingGroup('SS512')
 pre = AFGH06(groupObj)
 params = pre.setup()
 
-def consumer(self, pkb, plabels,piilist):
+pkbs=[]
+skbs=[]
+for i in range(10):
+    (pk_b, sk_b) = pre.keygen(params)
+    pkbs.append(pk_b)
+    skbs.append(sk_b)
+
+def consumer(pkb, plabels,piilist):
     (pk_c, sk_c) = pre.keygen(params)
     cs = {}
     for label in plabels:
@@ -35,10 +42,13 @@ def consumer(self, pkb, plabels,piilist):
             msg = groupObj.random(ZR)
             cs[label] = pre.encrypt(params,pk_c,msg)
             # TODO: compute zkp
-    rk = pre.rekeygen(params, pk_c, sk_c, pkb)
-    return cs,rk
+    rks = []
+    for p in pkb:
+        rk = pre.rekeygen(params, pk_c, sk_c, p)
+        rks.append(rk)
+    return cs,rks
 
-def intermediary(self,rk,cs,ctildes):
+def intermediary(rk,cs,ctildes):
     res = {}
     for label in ctildes:
         reenc = pre.re_encrypt(params, rk, cs[label])
@@ -50,23 +60,20 @@ def intermediary(self,rk,cs,ctildes):
     return res
 
 
-def broker_enc(self,pkb,piilist):
+def broker_enc(pkb,piilist):
     res = {}
     for label in piilist:
         res[label] = pre.encrypt(params,pkb,piilist)
     return res
 
-def broker_pli(self, skb, intersec):
+def broker_pli(skb, intersec):
     res = []
     for label in intersec:
         if pre.decrypt(params, skb, intersec[label]) == groupObj.init(GT, 1):
             res.append(label)
     return res
 
-
-#test
-
-def getPIIList(self, filename):
+def getPIIList(filename):
     PIIList = {}
     with open(filename, 'r') as file:
         for line in file:
