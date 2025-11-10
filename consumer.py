@@ -29,7 +29,7 @@ def main():
     # # can change later to http get
 
     # encrypt elements and generate re-encryption keys and compute proofs (later)
-    cs, rks = iv.consumer(iv.pkbs,piilist.keys(),piilist.values())
+    cs, rks = iv.consumer(iv.pkbs,piilist.keys(),piilist)
 
     # send to intermediary
     objs = cs,rks

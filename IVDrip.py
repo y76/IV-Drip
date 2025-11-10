@@ -36,7 +36,8 @@ def consumer(pkb, plabels,piilist):
     cs = {}
     for label in plabels:
         if label in piilist:
-            cs[label] = pre.encrypt(params,pk_c,-piilist[label])
+            msg = groupObj.hash(piilist[label],ZR)
+            cs[label] = pre.encrypt(params,pk_c,-msg)
             # TODO: compute zkp
         else:
             msg = groupObj.random(ZR)
@@ -63,7 +64,8 @@ def intermediary(rk,cs,ctildes):
 def broker_enc(pkb,piilist):
     res = {}
     for label in piilist:
-        res[label] = pre.encrypt(params,pkb,piilist)
+        msg = groupObj.hash(piilist[label],ZR)
+        res[label] = pre.fencrypt(params,pkb,msg)
     return res
 
 def broker_pli(skb, intersec):

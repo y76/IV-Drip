@@ -21,10 +21,14 @@ BROKER_CERT = 'server.crt'
 def receive(conn):
     data = b''
     while True:
-        packet = conn.recv(4096)
-        if not packet:
+        try:
+            packet = conn.recv(4096)
+            if not packet:  # Connection closed gracefully
+                break
+            data += packet
+        except (BrokenPipeError, ConnectionResetError, OSError) as e:
+            # Connection closed by peer
             break
-        data += packet
 
     # parse charm objects
     objs = []
@@ -60,25 +64,17 @@ def main():
         print("Intermediary waiting for consumer...")
         with context.wrap_socket(sock, server_side=True) as ssock:
             conn, addr = ssock.accept()
-            # with conn:
-            objs = receive(conn)
-            cs, rs= objs
-            print("intermediary received data from consumer")
+            with conn:
+                objs = receive(conn)
+        sock.close()
+        cs, rs= objs
+        print("intermediary received data from consumer")
 
-            # send idc to broker
-            m=3 #broker id, just putting random here for now
-            idc = "Steve.Jobs@apple.com" #random for now
-            send(idc)
-            print("Intermediary sent idc to broker")
-
-            conn.shutdown(socket.SHUT_RDWR)
-            conn.close()
-
-    # # send idc to broker
-    # m=3 #broker id, just putting random here for now
-    # idc = "Steve.Jobs@apple.com" #random for now
-    # send(idc)
-    # print("Intermediary sent idc to broker")
+    # send idc to broker
+    m=3 #broker id, just putting random here for now
+    idc = "Steve.Jobs@apple.com" #random for now
+    send(idc)
+    print("Intermediary sent idc to broker")
 
 
     # receive values from broker
@@ -90,7 +86,8 @@ def main():
             conn, addr = ssock.accept()
             with conn:
                 objs = receive(conn)
-    ctildes = objs
+        sock.close()
+        ctildes = objs[0]
     print("intermediary received ctildes from broker")
 
     # perform computation: first need the correct label list (will do later)

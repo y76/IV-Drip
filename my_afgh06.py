@@ -88,6 +88,25 @@ class AFGH06(PREnc):
             group.debug(c)
         return c  
     
+    def fencrypt(self, params, pk, m):
+        #m = group.encode(M, GT)
+        r = group.random(ZR)
+        # gm = (params['g'] ** m)
+        # Z_a1 = pk['pk1']
+        Z_a2 = pk['pk2']
+
+        c1 = (Z_a2 ** r)
+        c2 = (params['Z'] ** m) * (params['Z'] ** r)
+
+        c = { 'c1' : c1, 'c2' : c2 }
+               
+        if(debug):
+            print('\nEncrypt...')
+            print('m => %s' % m)
+            print('r => %s' % r)
+            group.debug(c)
+        return c  
+    
     def expm(self, params, m):
         gm = (params['Z'] ** m)
         return gm
@@ -104,7 +123,7 @@ class AFGH06(PREnc):
         #return group.decode(m)
         return m
     
-    def add(self, params, ca, cb):
+    def add(self, ca, cb):
         ca1=ca['c1']
         ca2=ca['c2']
         cb1=cb['c1']
