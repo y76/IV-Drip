@@ -48,7 +48,11 @@ def send(objs):
     ctx.check_hostname = False
     with socket.create_connection((host, port)) as sock:
         with ctx.wrap_socket(sock, server_hostname=host) as ssock:
-            data = b''.join(len(objectToBytes(o, iv.groupObj)).to_bytes(4, 'big') + objectToBytes(o, iv.groupObj) for o in objs)
+            if isinstance(objs, list):
+                data = b''.join(len(objectToBytes(o, iv.groupObj)).to_bytes(4, 'big') + objectToBytes(o, iv.groupObj) for o in objs)
+            else :
+                obj_bytes = objectToBytes(objs, iv.groupObj)
+                data = len(obj_bytes).to_bytes(4, 'big') + obj_bytes
             ssock.sendall(data)
             return data
 

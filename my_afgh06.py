@@ -93,7 +93,7 @@ class AFGH06(PREnc):
         r = group.random(ZR)
         # gm = (params['g'] ** m)
         # Z_a1 = pk['pk1']
-        Z_a2 = pk['pk2']
+        Z_a2 = pair(params['g'],pk['pk2'])
 
         c1 = (Z_a2 ** r)
         c2 = (params['Z'] ** m) * (params['Z'] ** r)
@@ -128,6 +128,10 @@ class AFGH06(PREnc):
         ca2=ca['c2']
         cb1=cb['c1']
         cb2=cb['c2']
+        # print(f"ca1 type: {type(ca1)}, group: {ca1 if hasattr(ca1, '__class__') else 'unknown'}")
+        # print(f"cb1 type: {type(cb1)}, group: {cb1 if hasattr(cb1, '__class__') else 'unknown'}")
+        # print(f"ca2 type: {type(ca2)}")
+        # print(f"cb2 type: {type(cb2)}")
         cr1= ca1*cb1
         cr2=ca2*cb2
         cr={ 'c1' : cr1, 'c2' : cr2 }

@@ -86,7 +86,7 @@ def main():
             conn, addr = ssock.accept()
             with conn:
                 objs = receive(conn)
-    ais=objs
+    ais=objs[0]
     print("Broker received ais from intermediary")
     #get result of PLI and output intersection
     intersec = iv.broker_pli(iv.skbs[broker_id],ais)
