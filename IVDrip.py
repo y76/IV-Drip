@@ -1,6 +1,7 @@
 from my_afgh06 import AFGH06
 from charm.toolbox.pairinggroup import PairingGroup,ZR,G1,G2,GT,pair
 from charm.toolbox.PREnc import PREnc
+from charm.core.engine.util import objectToBytes,bytesToObject
 
 
 ## TEST
@@ -36,8 +37,14 @@ def consumer(pkb, plabels,piilist):
     cs = {}
     for label in plabels:
         if label in piilist:
-            msg = groupObj.hash(piilist[label],ZR)
-            cs[label] = pre.encrypt(params,pk_c,-msg)
+            msg = -groupObj.hash(piilist[label],ZR)
+            cs[label] = pre.encrypt(params,pk_c,msg)
+            # test = pre.fencrypt(params,pk_c,msg)
+            # test1 = pre.fencrypt(params,pk_c,-msg)
+            # addd = pre.add(test,test1)
+            # deccc = pre.decrypt(params,sk_c,addd)
+            # print(deccc)
+            # print()
             # TODO: compute zkp
         else:
             msg = groupObj.random(ZR)
@@ -71,6 +78,10 @@ def broker_enc(pkb,piilist):
 def broker_pli(skb, intersec):
     res = []
     for label in intersec:
+        # print(pre.decrypt(params, skb, intersec[label]), groupObj.init(GT, 1), pre.expm(params, groupObj.init(ZR, 0)))
+        # print()
+        identity = params['Z'] ** 0
+        Z_m=pre.decrypt(params, skb, intersec[label])
         if pre.decrypt(params, skb, intersec[label]) == groupObj.init(GT, 1):
             res.append(label)
     return res
