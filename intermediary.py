@@ -1,11 +1,11 @@
-# import IVDrip as iv
-from IVDrip import IVDrip
+import IVDrip as iv
+# from IVDrip import IVDrip
 import ast 
 from charm.toolbox.pairinggroup import PairingGroup,ZR,G1,G2,GT,pair
 import socket
 import ssl
 from charm.core.engine.util import objectToBytes, bytesToObject
-
+from config import groupObj, pre, params, pk_b, sk_b, pk_c, sk_c
 
 HOST = '127.0.0.1'
 PORT = 8443
@@ -16,7 +16,7 @@ KEY_FILE = 'intermediary.key'
 BROKER_HOST = '127.0.0.1'
 BROKER_PORT = 8555
 BROKER_CERT = 'server.crt'
-iv = IVDrip(10)
+# iv = IVDrip(10)
 
 
 def receive(conn):
@@ -39,7 +39,7 @@ def receive(conn):
         idx += 4
         obj_bytes = data[idx:idx+length]
         idx += length
-        obj = bytesToObject(obj_bytes, iv.groupObj)
+        obj = bytesToObject(obj_bytes, groupObj)
         objs.append(obj)
     return objs
 
@@ -50,9 +50,9 @@ def send(objs):
     with socket.create_connection((host, port)) as sock:
         with ctx.wrap_socket(sock, server_hostname=host) as ssock:
             if isinstance(objs, list):
-                data = b''.join(len(objectToBytes(o, iv.groupObj)).to_bytes(4, 'big') + objectToBytes(o, iv.groupObj) for o in objs)
+                data = b''.join(len(objectToBytes(o, groupObj)).to_bytes(4, 'big') + objectToBytes(o, groupObj) for o in objs)
             else :
-                obj_bytes = objectToBytes(objs, iv.groupObj)
+                obj_bytes = objectToBytes(objs, groupObj)
                 data = len(obj_bytes).to_bytes(4, 'big') + obj_bytes
             ssock.sendall(data)
             return data
@@ -76,7 +76,7 @@ def main():
         print("intermediary received data from consumer")
 
     # send idc to broker
-    m=3 #broker id, just putting random here for now
+    m=0 #broker id, just putting random here for now
     idc = "Steve.Jobs@apple.com" #random for now
     send(idc)
     print("Intermediary sent idc to broker")

@@ -1,10 +1,11 @@
-# import IVDrip as iv
-from IVDrip import IVDrip
+import IVDrip as iv
+# from IVDrip import IVDrip
 import ast 
 from charm.toolbox.pairinggroup import PairingGroup,ZR,G1,G2,GT,pair
 import socket
 import ssl
 from charm.core.engine.util import objectToBytes, bytesToObject
+from config import groupObj, pre, params, pk_b, sk_b, pk_c, sk_c
 
 HOST = '127.0.0.1'
 PORT = 8555
@@ -13,7 +14,7 @@ KEY_FILE = 'server.key'
 
 INTERMEDIARY_PORT = 8443
 INTERMEDIARY_CERT = 'intermediary.crt'
-iv = IVDrip(10)
+# iv = IVDrip(10)
 
 def receive(conn):
     data = b''
@@ -35,7 +36,7 @@ def receive(conn):
         idx += 4
         obj_bytes = data[idx:idx+length]
         idx += length
-        obj = bytesToObject(obj_bytes, iv.groupObj)
+        obj = bytesToObject(obj_bytes, groupObj)
         objs.append(obj)
     return objs
     
@@ -46,7 +47,7 @@ def send(objs):
     ctx.check_hostname = False
     with socket.create_connection((HOST, INTERMEDIARY_PORT)) as sock:
         with ctx.wrap_socket(sock, server_hostname=HOST) as ssock:
-            obj_bytes = objectToBytes(objs, iv.groupObj)
+            obj_bytes = objectToBytes(objs, groupObj)
             data = len(obj_bytes).to_bytes(4, 'big') + obj_bytes
             # data = b''.join(len(objectToBytes(o, iv.groupObj)).to_bytes(4, 'big') + objectToBytes(o, iv.groupObj) for o in objs)
             ssock.sendall(data)
@@ -55,7 +56,7 @@ def send(objs):
 def main():
     context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
     context.load_cert_chain(certfile=CERT_FILE, keyfile=KEY_FILE)
-    broker_id = 3 #random id, can change later i guess.
+    broker_id = 0 #random id, can change later i guess.
 
     # receive id from intermediary and lookup ID
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
@@ -71,7 +72,7 @@ def main():
     #assume successful IDc lookup, get piilist
     piilist = iv.getPIIList("data.txt")
     # Encrypt pii under its own pk -> ctildes
-    pkb=iv.pkbs[broker_id]
+    pkb=pk_b
     ctildes = iv.broker_enc(pkb,piilist)
 
     # send ctildes to intermediary
@@ -90,7 +91,7 @@ def main():
     ais=objs[0]
     print("Broker received ais from intermediary")
     #get result of PLI and output intersection
-    intersec = iv.broker_pli(iv.skbs[broker_id],ais)
+    intersec = iv.broker_pli(sk_b,ais)
     print("intersection is: ", intersec)
 
 if __name__ == "__main__":
