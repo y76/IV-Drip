@@ -1,4 +1,5 @@
-import IVDrip as iv
+# import IVDrip as iv
+from IVDrip import IVDrip
 import socket, ssl
 import ast 
 from charm.toolbox.pairinggroup import PairingGroup,ZR,G1,G2,GT,pair
@@ -8,7 +9,7 @@ from charm.core.engine.util import objectToBytes,bytesToObject
 HOST = '127.0.0.1'
 PORT = 8443
 SERVER_CERT = 'intermediary.crt'
-
+iv = IVDrip(10)
 
 def send(objs):
     ctx = ssl.create_default_context(ssl.Purpose.SERVER_AUTH, cafile=SERVER_CERT)

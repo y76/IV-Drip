@@ -1,4 +1,5 @@
-import IVDrip as iv
+# import IVDrip as iv
+from IVDrip import IVDrip
 import ast 
 from charm.toolbox.pairinggroup import PairingGroup,ZR,G1,G2,GT,pair
 import socket
@@ -15,7 +16,7 @@ KEY_FILE = 'intermediary.key'
 BROKER_HOST = '127.0.0.1'
 BROKER_PORT = 8555
 BROKER_CERT = 'server.crt'
-
+iv = IVDrip(10)
 
 
 def receive(conn):
