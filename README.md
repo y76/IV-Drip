@@ -2,16 +2,12 @@
 
 ## Activate the Virtual Environment
 
+TODO: complete README
+
 From any terminal:
 
 ```bash
 source ~/venv/charm/bin/activate
-```
-
-You’ll know it’s active when your prompt looks like:
-
-```
-(charm) pavel@your-pc:~$
 ```
 
 ---
@@ -26,10 +22,6 @@ deactivate
 
 Your prompt will return to normal:
 
-```
-pavel@your-pc:~$
-```
-
 ---
 
 That’s it — activate to use Charm, deactivate when you're done.
@@ -38,10 +30,6 @@ That’s it — activate to use Charm, deactivate when you're done.
 - https://github.com/JHUISI/charm
 - https://github.com/blynn/pbc/tree/master
 
-```
-(charm) pavel@pavel:~/apps/IV-Drip$ python IVDrip.py
-73640224791758403476681047032923996554157944894
-```
 
 
 ## Update your bashrc

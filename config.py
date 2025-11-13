@@ -13,6 +13,8 @@ print(f"Loaded params.")
 
 # Load keys
 with open('keys.bin', 'rb') as f:
-    pk_b, sk_b, pk_c, sk_c = bytesToObject(f.read(), groupObj)
-    # pk_b, sk_b, pk_c, sk_c = data
+    data = bytesToObject(f.read(), groupObj)
+    pkbs, skbs, pk_c, sk_c = data
+    pk_b = pkbs[0]
+    sk_b=skbs[0]
 print(f"Loaded keys.")
