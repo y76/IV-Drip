@@ -1,4 +1,4 @@
-# PIVOT (IV-Drip)
+# PIVOT - Supporting Private and Efficient Consumer Requests to Data Brokers
 
 Source code for **PIVOT**, from the paper:
 
