@@ -41,8 +41,6 @@ PIVOT combines **unidirectional proxy re-encryption** (AFGH06) with **additively
 
 All parties talk over TLS-secured TCP sockets on localhost (intermediary `:8443`/`:8444`, broker `:8555`).
 
-> The full implementation is on the `main` branch. The `chloe` and `chloe-1` branches hold an earlier socket-protocol prototype (`client.py`) that uses a toy, **non-cryptographic** shim.
-
 ## Requirements
 
 - Python 3.13 (the paper's version is 3.13.3)
@@ -117,8 +115,3 @@ Key results from the paper (MacBook Pro M4, 24 GB RAM, localhost, averaged over 
 ## Disclaimer
 
 This is a research prototype and has not been audited for production use. The bundled TLS keys and certificates are for local testing only. Do not reuse them.
-
-## References
-
-- G. Ateniese, K. Fu, M. Green, S. Hohenberger. *Improved proxy re-encryption schemes with applications to secure distributed storage.* ACM TISSEC 9(1), 2006.
-- J. A. Akinyele, M. D. Green, A. D. Rubin. *Charm: A Framework for Rapidly Prototyping Cryptosystems.* 2011.
